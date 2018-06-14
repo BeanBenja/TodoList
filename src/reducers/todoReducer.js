@@ -1,34 +1,36 @@
-const init = {
+export const init = {
   text: '',
   items: []
 }
-const type = {
+
+export const type = {
   TODO_TEXT_CHANGE: 'TODO_TEXT_CHANGE',
   TODO_ADD: 'TODO_ADD',
   TODO_DEL: 'TODO_DEL'
 }
+export const addTodo = () => {
+  return {
+    type: type.TODO_ADD
+  }
+}
+export const changeTodoText = (text) => {
+  return {
+    type: type.TODO_TEXT_CHANGE,
+    payload: text
+  }
+}
+export const delTodoById = (id) => {
+  return {
+    type: type.TODO_DEL,
+    payload: id
+  }
+}
 
-// action
-export const addTodo = () => ({
-  type: type.TODO_ADD
-})
-
-export const changeTodoText = (text) => ({
-  type: type.TODO_TEXT_CHANGE,
-  payload: text
-})
-
-export const delTodo = (id) => ({
-  type: type.TODO_DEL,
-  payload: id
-})
-
-// reducer
 const todoReducer = (state = init, action) => {
   switch (action.type) {
     case type.TODO_ADD:
       return {
-        text: '',
+        text:'',
         items: [...state.items, state.text]
       }
     case type.TODO_TEXT_CHANGE:
@@ -37,17 +39,15 @@ const todoReducer = (state = init, action) => {
         text: action.payload
       }
     case type.TODO_DEL:
-      const item = state.items
-      item.splice(action.payload, 1)
+      let items = JSON.parse(JSON.stringify(state.items))
+      items.splice(action.payload, 1)
       return {
-        items:[
-          ...state,
-          ...state.items.splice(item)
-        ]
+        ...state,
+        items
       }
     default:
       return state
-
   }
 }
+
 export default todoReducer
